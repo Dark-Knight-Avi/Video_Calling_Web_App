@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Video Chat</title>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <!-- Theme CSS -->
+    <link href="{% static 'css/agency.css' %}" rel="stylesheet">
+    <style>
+        .home-bg {
+            background-image: url("{% static 'images/Home-bg.png' %}");
+            background-size: cover;
+            height: 110vh;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            z-index: -9;
+        }
+        /*Neon Button*/
+        
+        .n-button {
+            position: relative;
+            display: inline-block;
+            padding: 15px 15px;
+            color: #f1f1f1;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-decoration: none;
+            font-size: 22px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+        
+        .n-button:hover {
+            color: black;
+            background: #f1f1f1;
+            box-shadow: 0 0 10px #f1f1f1, 0 0 40px #f1f1f1, 0 0 80px #f1f1f1;
+            transition-delay: 1s;
+        }
+        
+        .n-button .n-button-span {
+            position: absolute;
+            display: block;
+        }
+        
+        .n-button .n-button-span:nth-child(1) {
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f1f1f1);
+        }
+        
+        .n-button:hover .n-button-span:nth-child(1) {
+            left: 100%;
+            transition: 1s;
+        }
+        
+        .n-button .n-button-span:nth-child(3) {
+            bottom: 0;
+            right: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(270deg, transparent, #f1f1f1);
+        }
+        
+        .n-button:hover .n-button-span:nth-child(3) {
+            right: 100%;
+            transition: 1s;
+            transition-delay: 0.5s;
+        }
+        
+        .n-button .n-button-span:nth-child(2) {
+            top: -100%;
+            right: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #f1f1f1);
+        }
+        
+        .n-button:hover .n-button-span:nth-child(2) {
+            top: 100%;
+            transition: 1s;
+            transition-delay: 0.25s;
+        }
+        
+        .n-button .n-button-span:nth-child(4) {
+            bottom: -100%;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(360deg, transparent, #f1f1f1);
+        }
+        
+        .n-button:hover .n-button-span:nth-child(4) {
+            bottom: 100%;
+            transition: 1s;
+            transition-delay: 0.75s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <nav class="navbar navbar-toggleable-sm navbar-inverse fixed-top bg-inverse">
+        <a class="navbar-brand" href="/">Video chat App</a>
+    </nav> -->
+    <div class="home-bg"></div>
+    <div class="d-flex justify-content-between">
+        <div class="text-white mt-4 mx-5 px-5 h2">Welcome {{ request.user }}</div>
+        <div class="text-white mt-4 mx-5 px-5 h2">
+            Your ID:
+            <h4 id="peer-id" data-toggle="tooltip" data-placement="top" title="Click to copy peer ID">
+                </h3>
+                <a href="#getUserNameModal" data-toggle="modal">change</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between px-4">
+        <div class="text-white mt-5 mx-5 px-5 h2">
+            <a class="navbar-brand d-flex align-items-center logo" href="/">
+                <img src="{% static 'images/App-logo-removebg-preview.png' %}" alt="" width="40" height="40" class="d-inline-block align-text-top">
+                <h2 class="text-white">vZoom</h2>
+            </a>
+        </div>
+        <div class="text-white mt-5 mx-5 px-5 h2">
+            <div class="neon-button">
+                <a href="/logout" class="n-button" style="text-decoration: none;">
+                    <span class="n-button-span"></span>
+                    <span class="n-button-span"></span>
+                    <span class="n-button-span"></span>
+                    <span class="n-button-span"></span> Log out
+                </a>
+            </div>
+        </div>
+    </div>
+    <section id="chat-app" class="d-flex justify-content-around" style="padding-top: 70px;">
+        <div class="d-flex align-items-center flex-column" style="width: 360px;">
+            <div class="h1 text-white text-center">Great Meetings Just The Beginning</div>
+            <!-- <div class="row row1" style="height: 100px;"></div> -->
+            <div class=" d-block m-auto">
+                <div class="">
+                    <div class="form-inline">
+                        <div class="form-group mr-sm-3">
+                            <div class="d-flex flex-column">
+                                <label for="inputPeerUserId" class="text-white h4 my-3">Enter Your Friend's ID:</label>
+                                <input type="text" class="form-control" id="inputPeerUserId" placeholder="Enter your friends ID">
+                                <button type="button" class="btn btn-outline-primary my-3" id='connect-btn'>Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-6 col-md-6 mb-4 hide">
+                    <div class="panel panel-primary" style="width: 400px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Online Users</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="onlinepeers"></ul>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div style="width: 200px; height:100px;"></div>
+    </section>
+
+    <div class="container-fluid chat-container">
+        <div class="row">
+        </div>
+    </div>
+
+    <!-- Portfolio Modals -->
+    <!-- Use the modals below to showcase details about your portfolio projects! -->
+    <!-- Portfolio Modal 1 -->
+    <div class="portfolio-modal modal" id="videoCallPanel" tabindex="-1" role="dialog" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" style="width: 100%;">
+            <div class="modal-content" style="background-color: #222;">
+                <div class="close-modal end-call hide" data-dismiss="modal">
+                    <div class="lr">
+                        <div class="rl">
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="modal-body">
+                        <h2 class="h3 text-white">Hey {{ request.user }}, enjoy!!</h2>
+                        <div class="pure-u-2-3" id="video-container" style="margin-top: 22px;">
+                            <video id="their-video" autoplay="" style="width: 100%; height: 70vh;"></video>
+                            <video id="my-video" muted="true" autoplay="" style="position: absolute; height: 200px; top: 88px; width: 267px; left: calc(15px); border: 2px solid chocolate; border-radius: 100px; background-color: chocolate;"></video>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <button type="button" class="btn btn-secondary mute-audio ml-3 mt-2"><i class="fa fa-microphone-slash mx-1"></i>Mute Audio</button>
+                            <button type="button" class="btn btn-secondary mute-video ml-3 mt-2"><i class="fa fa-video-camera mx-1"></i>Mute Video</button>
+                            <button type="button" class="btn btn-danger end-call ml-3 mt-2" data-dismiss="modal"><i class="fa fa-times mx-1"></i>End Call</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="getUserNameModal" tabindex="-1" role="dialog" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop='static'>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content " style="background-color: #000; border: 2px solid white;">
+                <div class="modal-header" style="border: none;">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">Enter your Name</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="user-name" placeholder="Name..." style="background: none; border: 2px solid white; outline:none; color: white;">
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none;">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary username-done">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal  -->
+    <div class="modal" id="callConfirmationModal" tabindex="-1" role="dialog" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop='static'>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modalAlert" style="background-color: #000; border: 2px solid white;">
+                <div class="modal-header" style="border: none;">
+                    <h5 class="modal-title peer-name text-white"></h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger reject-call" data-dismiss="modal">Reject</button>
+                    <button type="button" class="btn btn-primary accept-call" data-dismiss="modal">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+
+    <script src="{% static 'js/peer.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/peer-client.js' %}"></script>
+</body>
+
+</html>

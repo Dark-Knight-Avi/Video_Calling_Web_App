@@ -1,0 +1,38 @@
+{% extends "basic.html" %} {% block title %}Home | vZoom{% endblock title %} {% block homeCard %}
+
+<section id="home-card" class="d-flex justify-content-around flex-column" style="padding-top: 70px;">
+    <div style="width: 200px; height:250px;"></div>
+    <div class="d-flex justify-content-around ml-5">
+        <div class="d-flex align-items-center flex-column" style="width: 450px;">
+            <div class="h1 text-white">Keeping you connected wherever you are</div>
+            <div class="h5 text-white">We help your team build great meeting habits through collaborative agendas and easy to schedule meetings.</div>
+            <div class="border-top w-100 my-3 py-4">
+                <div class="neon-button d-flex justify-content-between">
+                    <a href="/home" class="n-button" style="text-decoration: none;">
+                        <span class="n-button-span"></span>
+                        <span class="n-button-span"></span>
+                        <span class="n-button-span"></span>
+                        <span class="n-button-span"></span> Start Now
+                    </a>
+                    <a href="/registration" class="n-button" style="text-decoration: none;">
+                        <span class="n-button-span"></span>
+                        <span class="n-button-span"></span>
+                        <span class="n-button-span"></span>
+                        <span class="n-button-span"></span> Register
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div style="width: 200px; height:100px;"></div>
+    </div>
+</section>
+{% endblock homeCard %} {% block signButton %}
+<div class="neon-button">
+    <a href="/login" class="n-button" style="text-decoration: none;">
+        <span class="n-button-span"></span>
+        <span class="n-button-span"></span>
+        <span class="n-button-span"></span>
+        <span class="n-button-span"></span> Sign in
+    </a>
+</div>
+{% endblock signButton %}
